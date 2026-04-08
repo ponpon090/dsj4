@@ -1,0 +1,89 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/Settings.gd" id="1_settings"]
+
+[node name="Settings" type="Control"]
+script = ExtResource("1_settings")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.2, 0.95)
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -250.0
+offset_right = 300.0
+offset_bottom = 250.0
+
+[node name="TitleLabel" type="Label" parent="Panel"]
+offset_left = 20.0
+offset_top = 10.0
+offset_right = 580.0
+offset_bottom = 40.0
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+offset_left = 20.0
+offset_top = 50.0
+offset_right = 580.0
+offset_bottom = 450.0
+
+[node name="MusicContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+
+[node name="MusicLabel" type="Label" parent="Panel/VBoxContainer/MusicContainer"]
+text = "Music Volume:"
+custom_minimum_size = Vector2(150, 0)
+
+[node name="MusicSlider" type="HSlider" parent="Panel/VBoxContainer/MusicContainer"]
+min_value = 0.0
+max_value = 1.0
+value = 0.8
+size_flags_horizontal = 3
+
+[node name="SFXContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+
+[node name="SFXLabel" type="Label" parent="Panel/VBoxContainer/SFXContainer"]
+text = "SFX Volume:"
+custom_minimum_size = Vector2(150, 0)
+
+[node name="SFXSlider" type="HSlider" parent="Panel/VBoxContainer/SFXContainer"]
+min_value = 0.0
+max_value = 1.0
+value = 1.0
+size_flags_horizontal = 3
+
+[node name="QualityContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+
+[node name="QualityLabel" type="Label" parent="Panel/VBoxContainer/QualityContainer"]
+text = "Quality:"
+custom_minimum_size = Vector2(150, 0)
+
+[node name="QualityOption" type="OptionButton" parent="Panel/VBoxContainer/QualityContainer"]
+size_flags_horizontal = 3
+
+[node name="DifficultyContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+
+[node name="DifficultyLabel" type="Label" parent="Panel/VBoxContainer/DifficultyContainer"]
+text = "Difficulty:"
+custom_minimum_size = Vector2(150, 0)
+
+[node name="DifficultyOption" type="OptionButton" parent="Panel/VBoxContainer/DifficultyContainer"]
+size_flags_horizontal = 3
+
+[node name="BackButton" type="Button" parent="Panel"]
+offset_left = 200.0
+offset_top = 460.0
+offset_right = 400.0
+offset_bottom = 495.0
+text = "Save & Back"

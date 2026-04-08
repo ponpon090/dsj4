@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="HillConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/HillConfig.gd" id="1_k120"]
+
+[resource]
+script = ExtResource("1_k120")
+hill_name = "K120 - Ski Flying"
+k_point = 120.0
+critical_point = 130.0
+hill_size = 120.0
+inrun_length = 140.0
+inrun_angle = 34.0
+takeoff_angle = 10.0
+landing_angle = 34.0
+table_height = 0.0
+judges_points = 60.0
+wind_factor = 1.5

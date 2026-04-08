@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="HillConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/HillConfig.gd" id="1_k60"]
+
+[resource]
+script = ExtResource("1_k60")
+hill_name = "K60 - Normal Hill"
+k_point = 60.0
+critical_point = 66.0
+hill_size = 60.0
+inrun_length = 80.0
+inrun_angle = 32.0
+takeoff_angle = 10.5
+landing_angle = 32.0
+table_height = 0.0
+judges_points = 60.0
+wind_factor = 1.0
