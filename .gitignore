@@ -1,0 +1,28 @@
+# Godot 4 build artifacts and editor files
+.godot/
+*.import
+export_presets.cfg
+
+# Android export
+android/build/
+
+# Build outputs
+*.apk
+*.aab
+*.exe
+*.x86_64
+*.arm64
+*.pck
+*.zip
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Editor backup files
+*.bak
+*.tmp
+
+# Gradle (leftover from initial build.gradle)
+.gradle/
+build/

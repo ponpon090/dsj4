@@ -1,0 +1,572 @@
+[gd_scene load_steps=28 format=3 uid="uid://game_scene"]
+
+[ext_resource type="Script" path="res://scripts/game.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/skier.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="3"]
+[ext_resource type="Script" path="res://scripts/wind_system.gd" id="4"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ramp"]
+size = Vector3(4.0, 0.5, 120.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_landing"]
+size = Vector3(20.0, 0.5, 200.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_skier"]
+size = Vector3(0.5, 1.8, 0.4)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_skier"]
+radius = 0.3
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="SnowMaterial"]
+albedo_color = Color(0.92, 0.95, 1.0, 1.0)
+roughness = 0.9
+metallic = 0.0
+
+[sub_resource type="StandardMaterial3D" id="RampMaterial"]
+albedo_color = Color(0.85, 0.88, 0.95, 1.0)
+roughness = 0.3
+metallic = 0.1
+
+[sub_resource type="StandardMaterial3D" id="SkierMaterial"]
+albedo_color = Color(0.1, 0.3, 0.8, 1.0)
+roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="SkiMaterial"]
+albedo_color = Color(0.05, 0.05, 0.05, 1.0)
+roughness = 0.2
+metallic = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StructureMaterial"]
+albedo_color = Color(0.6, 0.5, 0.4, 1.0)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="SkyMaterial"]
+albedo_color = Color(0.35, 0.55, 0.85, 1.0)
+roughness = 1.0
+shading_mode = 0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hud"]
+bg_color = Color(0.0, 0.05, 0.1, 0.75)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.5, 0.9, 0.6)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_results"]
+bg_color = Color(0.02, 0.05, 0.12, 0.95)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.8, 1.0, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jumpbar"]
+bg_color = Color(0.1, 0.5, 1.0, 0.9)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="BoxMesh" id="BoxMesh_ramp"]
+size = Vector3(4.0, 0.3, 120.0)
+material = SubResource("RampMaterial")
+
+[sub_resource type="BoxMesh" id="BoxMesh_table"]
+size = Vector3(4.0, 0.3, 8.0)
+material = SubResource("RampMaterial")
+
+[sub_resource type="BoxMesh" id="BoxMesh_landing"]
+size = Vector3(20.0, 0.3, 200.0)
+material = SubResource("SnowMaterial")
+
+[sub_resource type="BoxMesh" id="BoxMesh_outrun"]
+size = Vector3(25.0, 0.3, 60.0)
+material = SubResource("SnowMaterial")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tower"]
+top_radius = 1.5
+bottom_radius = 2.0
+height = 40.0
+material = SubResource("StructureMaterial")
+
+[sub_resource type="BoxMesh" id="BoxMesh_background_mountain"]
+size = Vector3(300.0, 80.0, 30.0)
+material = SubResource("SnowMaterial")
+
+[sub_resource type="BoxMesh" id="BoxMesh_skier_body"]
+size = Vector3(0.4, 1.4, 0.35)
+material = SubResource("SkierMaterial")
+
+[sub_resource type="BoxMesh" id="BoxMesh_ski_left"]
+size = Vector3(0.08, 0.04, 2.0)
+material = SubResource("SkiMaterial")
+
+[sub_resource type="BoxMesh" id="BoxMesh_ski_right"]
+size = Vector3(0.08, 0.04, 2.0)
+material = SubResource("SkiMaterial")
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="DirectionalLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.354, 0.354, 0.0, 0.707, 0.707, -0.5, -0.612, 0.612, 0.0, 60.0, 0.0)
+shadow_enabled = true
+light_color = Color(1.0, 0.97, 0.9, 1.0)
+light_energy = 1.2
+
+[node name="AmbientLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30.0, 0.0)
+light_color = Color(0.4, 0.5, 0.7, 1.0)
+light_energy = 0.4
+
+[node name="SkiJump" type="Node3D" parent="."]
+
+[node name="InrunRamp" type="StaticBody3D" parent="SkiJump"]
+transform = Transform3D(1, 0, 0, 0, 0.966, 0.259, 0, -0.259, 0.966, 0, 35.0, -10.0)
+
+[node name="RampMesh" type="MeshInstance3D" parent="SkiJump/InrunRamp"]
+mesh = SubResource("BoxMesh_ramp")
+
+[node name="RampCollider" type="CollisionShape3D" parent="SkiJump/InrunRamp"]
+shape = SubResource("BoxShape3D_ramp")
+
+[node name="JumpTable" type="StaticBody3D" parent="SkiJump"]
+transform = Transform3D(1, 0, 0, 0, 0.985, 0.174, 0, -0.174, 0.985, 0, 4.0, -70.0)
+
+[node name="TableMesh" type="MeshInstance3D" parent="SkiJump/JumpTable"]
+mesh = SubResource("BoxMesh_table")
+
+[node name="LandingSlope" type="StaticBody3D" parent="SkiJump"]
+transform = Transform3D(1, 0, 0, 0, 0.788, 0.616, 0, -0.616, 0.788, 0, -5.0, -80.0)
+
+[node name="LandingMesh" type="MeshInstance3D" parent="SkiJump/LandingSlope"]
+mesh = SubResource("BoxMesh_landing")
+
+[node name="LandingCollider" type="CollisionShape3D" parent="SkiJump/LandingSlope"]
+shape = SubResource("BoxShape3D_landing")
+
+[node name="OutrunFlat" type="StaticBody3D" parent="SkiJump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -60.0, -175.0)
+
+[node name="OutrunMesh" type="MeshInstance3D" parent="SkiJump/OutrunFlat"]
+mesh = SubResource("BoxMesh_outrun")
+
+[node name="TowerStructure" type="StaticBody3D" parent="SkiJump"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.0, -5.0)
+
+[node name="TowerMesh" type="MeshInstance3D" parent="SkiJump/TowerStructure"]
+mesh = SubResource("CylinderMesh_tower")
+
+[node name="BackgroundMountain" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.0, -250.0)
+mesh = SubResource("BoxMesh_background_mountain")
+
+[node name="Skier" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38.0, -5.0)
+script = ExtResource("2")
+
+[node name="SkierBody" type="MeshInstance3D" parent="Skier"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0, 0.0)
+mesh = SubResource("BoxMesh_skier_body")
+
+[node name="SkiLeft" type="MeshInstance3D" parent="Skier"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.2, -0.7, 0.0)
+mesh = SubResource("BoxMesh_ski_left")
+
+[node name="SkiRight" type="MeshInstance3D" parent="Skier"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, -0.7, 0.0)
+mesh = SubResource("BoxMesh_ski_right")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Skier"]
+shape = SubResource("CapsuleShape3D_skier")
+
+[node name="WindSystem" type="Node3D" parent="."]
+script = ExtResource("4")
+
+[node name="InrunCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.94, 0.342, 0, -0.342, 0.94, 0, 50.0, 20.0)
+current = true
+fov = 75.0
+
+[node name="CameraPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.0, 0.0)
+
+[node name="JumpCamera" type="Camera3D" parent="CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 0.94, 0.342, 0, -0.342, 0.94, 3.0, 3.0, 8.0)
+current = false
+fov = 80.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("3")
+
+[node name="HUDPanel" type="PanelContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 230.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hud")
+
+[node name="VBox" type="VBoxContainer" parent="HUD/HUDPanel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SpeedRow" type="HBoxContainer" parent="HUD/HUDPanel/VBox"]
+layout_mode = 2
+
+[node name="SpeedIcon" type="Label" parent="HUD/HUDPanel/VBox/SpeedRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "⚡ Prędkość"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.6, 0.8, 1.0, 1.0)
+
+[node name="SpeedValue" type="Label" parent="HUD/HUDPanel/VBox/SpeedRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "0 km/h"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1.0, 1.0, 1.0, 1.0)
+horizontal_alignment = 2
+
+[node name="HeightRow" type="HBoxContainer" parent="HUD/HUDPanel/VBox"]
+layout_mode = 2
+
+[node name="HeightIcon" type="Label" parent="HUD/HUDPanel/VBox/HeightRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "↕ Wysokość"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.6, 0.8, 1.0, 1.0)
+
+[node name="HeightValue" type="Label" parent="HUD/HUDPanel/VBox/HeightRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "0.0 m"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1.0, 1.0, 1.0, 1.0)
+horizontal_alignment = 2
+
+[node name="DistanceRow" type="HBoxContainer" parent="HUD/HUDPanel/VBox"]
+layout_mode = 2
+
+[node name="DistIcon" type="Label" parent="HUD/HUDPanel/VBox/DistanceRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "→ Odległość"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.6, 0.8, 1.0, 1.0)
+
+[node name="DistanceValue" type="Label" parent="HUD/HUDPanel/VBox/DistanceRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "0.0 m"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1.0, 1.0, 1.0, 1.0)
+horizontal_alignment = 2
+
+[node name="WindRow" type="HBoxContainer" parent="HUD/HUDPanel/VBox"]
+layout_mode = 2
+
+[node name="WindIcon" type="Label" parent="HUD/HUDPanel/VBox/WindRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "🌬 Wiatr"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.6, 0.8, 1.0, 1.0)
+
+[node name="WindArrow" type="Label" parent="HUD/HUDPanel/VBox/WindRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(25, 0)
+text = "↔"
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 1
+
+[node name="WindValue" type="Label" parent="HUD/HUDPanel/VBox/WindRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(70, 0)
+text = "0.0 m/s"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1.0, 1.0, 1.0, 1.0)
+horizontal_alignment = 2
+
+[node name="PointsRow" type="HBoxContainer" parent="HUD/HUDPanel/VBox"]
+layout_mode = 2
+
+[node name="StyleIcon" type="Label" parent="HUD/HUDPanel/VBox/PointsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "★ Styl"
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1.0, 0.9, 0.4, 1.0)
+
+[node name="PointsValue" type="Label" parent="HUD/HUDPanel/VBox/PointsRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(90, 0)
+text = "20.0"
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1.0, 0.95, 0.4, 1.0)
+horizontal_alignment = 2
+
+[node name="KPointIndicator" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -160.0
+offset_top = 10.0
+offset_right = 160.0
+offset_bottom = 40.0
+text = "K-90 Normal Hill"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.9, 0.95, 1.0, 1.0)
+
+[node name="PhaseIndicator" type="PanelContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -130.0
+offset_top = 46.0
+offset_right = 130.0
+offset_bottom = 80.0
+
+[node name="PhaseLabel" type="Label" parent="HUD/PhaseIndicator"]
+layout_mode = 2
+text = "▼ ROZJAZD"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.8, 0.95, 1.0, 1.0)
+
+[node name="JumpChargeBar" type="ProgressBar" parent="HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 260.0
+offset_right = 150.0
+offset_bottom = 300.0
+custom_minimum_size = Vector2(300, 40)
+visible = false
+max_value = 100.0
+value = 0.0
+show_percentage = false
+
+[node name="ChargeLabel" type="Label" parent="HUD/JumpChargeBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "WYBICIE [SPACJA]"
+horizontal_alignment = 1
+vertical_alignment = 1
+theme_override_font_sizes/font_size = 14
+
+[node name="StyleBar" type="HBoxContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -220.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 38.0
+
+[node name="StyleLabel" type="Label" parent="HUD/StyleBar"]
+layout_mode = 2
+text = "Styl: "
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(1.0, 0.9, 0.4, 1.0)
+
+[node name="StyleProgress" type="ProgressBar" parent="HUD/StyleBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(120, 0)
+max_value = 20.0
+value = 20.0
+show_percentage = false
+
+[node name="WindIndicator" type="HBoxContainer" parent="HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -55.0
+offset_right = 130.0
+offset_bottom = -30.0
+
+[node name="HeadwindLabel" type="Label" parent="HUD/WindIndicator"]
+layout_mode = 2
+text = "←"
+theme_override_colors/font_color = Color(1.0, 0.4, 0.4, 1.0)
+
+[node name="WindBar" type="HSlider" parent="HUD/WindIndicator"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(200, 0)
+editable = false
+max_value = 100.0
+value = 50.0
+
+[node name="TailwindLabel" type="Label" parent="HUD/WindIndicator"]
+layout_mode = 2
+text = "→"
+theme_override_colors/font_color = Color(0.4, 1.0, 0.4, 1.0)
+
+[node name="Instructions" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -28.0
+offset_right = 300.0
+offset_bottom = -6.0
+text = "Przygotuj się do skoku..."
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+theme_override_colors/font_color = Color(0.8, 0.85, 0.9, 0.9)
+
+[node name="RoundLabel" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -160.0
+offset_top = 44.0
+offset_right = -10.0
+offset_bottom = 68.0
+text = "Seria 1 / 2"
+horizontal_alignment = 2
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(0.7, 0.85, 1.0, 1.0)
+
+[node name="ResultsOverlay" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="DimBackground" type="ColorRect" parent="ResultsOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.0, 0.0, 0.0, 0.65)
+
+[node name="Panel" type="PanelContainer" parent="ResultsOverlay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = -220.0
+offset_right = 260.0
+offset_bottom = 220.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_results")
+
+[node name="VBox" type="VBoxContainer" parent="ResultsOverlay/Panel"]
+layout_mode = 2
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+theme_override_constants/separation = 12
+
+[node name="ResultTitle" type="Label" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+text = "WYNIK SKOKU"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(0.9, 0.95, 1.0, 1.0)
+
+[node name="HSep" type="HSeparator" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+
+[node name="DistanceLabel" type="Label" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+text = "Odległość: -- m"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(0.4, 1.0, 0.6, 1.0)
+
+[node name="PointsLabel" type="Label" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+text = "Punkty odległość: --"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.8, 0.9, 1.0, 1.0)
+
+[node name="StyleLabel" type="Label" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+text = "Punkty styl: --"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1.0, 0.9, 0.4, 1.0)
+
+[node name="QualityLabel" type="Label" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+text = "Lądowanie: --"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.7, 1.0, 0.7, 1.0)
+
+[node name="HSep2" type="HSeparator" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+
+[node name="TotalLabel" type="Label" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+text = "SUMA: -- pkt"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1.0, 0.95, 0.2, 1.0)
+
+[node name="HSep3" type="HSeparator" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+
+[node name="ButtonRow" type="HBoxContainer" parent="ResultsOverlay/Panel/VBox"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 20
+
+[node name="NextButton" type="Button" parent="ResultsOverlay/Panel/VBox/ButtonRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 44)
+text = "▶ Dalej"
+theme_override_font_sizes/font_size = 17
+
+[node name="MenuButton" type="Button" parent="ResultsOverlay/Panel/VBox/ButtonRow"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 44)
+text = "⌂ Menu"
+theme_override_font_sizes/font_size = 17
