@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="HillConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/HillConfig.gd" id="1_k90"]
+
+[resource]
+script = ExtResource("1_k90")
+hill_name = "K90 - Large Hill"
+k_point = 90.0
+critical_point = 99.0
+hill_size = 90.0
+inrun_length = 110.0
+inrun_angle = 33.0
+takeoff_angle = 10.0
+landing_angle = 33.5
+table_height = 0.0
+judges_points = 60.0
+wind_factor = 1.2

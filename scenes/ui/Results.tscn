@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/Results.gd" id="1_results"]
+
+[node name="Results" type="CanvasLayer"]
+script = ExtResource("1_results")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 380.0
+offset_bottom = 380.0
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+text = "JUMP RESULTS"
+horizontal_alignment = 1
+
+[node name="DistanceLabel" type="Label" parent="Panel/VBoxContainer"]
+text = "Distance: 0 m"
+horizontal_alignment = 1
+
+[node name="PointsLabel" type="Label" parent="Panel/VBoxContainer"]
+text = "Total: 0 pts"
+horizontal_alignment = 1
+
+[node name="StyleLabel" type="Label" parent="Panel/VBoxContainer"]
+text = "Style: 0 pts"
+horizontal_alignment = 1
+
+[node name="GradeLabel" type="Label" parent="Panel/VBoxContainer"]
+text = "Grade: --"
+horizontal_alignment = 1
+
+[node name="NewRecordLabel" type="Label" parent="Panel/VBoxContainer"]
+text = "NEW RECORD!"
+horizontal_alignment = 1
+visible = false
+modulate = Color(1, 0.8, 0, 1)
+
+[node name="TryAgainButton" type="Button" parent="Panel/VBoxContainer"]
+text = "Try Again"
+size_flags_horizontal = 4
+
+[node name="MenuButton" type="Button" parent="Panel/VBoxContainer"]
+text = "Main Menu"
+size_flags_horizontal = 4

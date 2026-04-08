@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scenes/game/Skier.gd" id="1_skier"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_1"]
+radius = 0.3
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Material_1"]
+albedo_color = Color(0.1, 0.2, 0.8, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_1"]
+radius = 0.3
+height = 1.8
+
+[node name="Skier" type="CharacterBody3D"]
+script = ExtResource("1_skier")
+
+[node name="SkierMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_1")
+surface_material_override/0 = SubResource("Material_1")
+
+[node name="Collision" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape_1")

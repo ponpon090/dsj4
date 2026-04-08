@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scenes/game/Game.gd" id="1_game"]
+[ext_resource type="PackedScene" path="res://scenes/game/Skier.tscn" id="2_skier"]
+[ext_resource type="PackedScene" path="res://scenes/game/SkiJump.tscn" id="3_skijump"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="4_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/Results.tscn" id="5_results"]
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_game")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+position = Vector3(0, 50, 0)
+rotation_degrees = Vector3(-45, 30, 0)
+light_color = Color(1, 0.98, 0.95, 1)
+light_energy = 1.5
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(15, 5, 0)
+rotation_degrees = Vector3(-10, -90, 0)
+fov = 75.0
+
+[node name="SkiJump" type="Node3D" parent="."]
+instance = ExtResource("3_skijump")
+
+[node name="Skier" type="Node3D" parent="."]
+instance = ExtResource("2_skier")
+
+[node name="WindSystem" type="Node" parent="."]
+
+[node name="HUD" type="CanvasLayer" parent="."]
+instance = ExtResource("4_hud")
+
+[node name="ResultsUI" type="CanvasLayer" parent="."]
+instance = ExtResource("5_results")
+
+[node name="HillSelectUI" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+visible = false
+
+[node name="HillLabel" type="Label" parent="HillSelectUI"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -200.0
+offset_top = 20.0
+offset_right = 200.0
+offset_bottom = 50.0
+text = "Select Hill"
+horizontal_alignment = 1

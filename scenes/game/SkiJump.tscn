@@ -1,0 +1,69 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="Script" path="res://scenes/game/SkiJump.gd" id="1_skijump"]
+[ext_resource type="Material" path="res://resources/materials/snow_material.tres" id="2_snow"]
+[ext_resource type="Material" path="res://resources/materials/wood_material.tres" id="3_wood"]
+[ext_resource type="Material" path="res://resources/materials/metal_material.tres" id="4_metal"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_inrun"]
+size = Vector3(4, 0.2, 120)
+
+[sub_resource type="BoxMesh" id="BoxMesh_landing"]
+size = Vector3(20, 0.2, 200)
+
+[sub_resource type="BoxMesh" id="BoxMesh_tower"]
+size = Vector3(4, 40, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_table"]
+size = Vector3(4, 0.3, 3)
+
+[sub_resource type="StaticBody3D" id="StaticBody_landing"]
+
+[node name="SkiJump" type="Node3D"]
+script = ExtResource("1_skijump")
+
+[node name="Inrun" type="Node3D" parent="."]
+rotation_degrees = Vector3(-33, 0, 0)
+
+[node name="InrunMesh" type="MeshInstance3D" parent="Inrun"]
+mesh = SubResource("BoxMesh_inrun")
+surface_material_override/0 = ExtResource("2_snow")
+
+[node name="InrunCollider" type="StaticBody3D" parent="Inrun"]
+
+[node name="InrunColliderShape" type="CollisionShape3D" parent="Inrun/InrunCollider"]
+shape = SubResource("BoxMesh_inrun")
+
+[node name="Tower" type="Node3D" parent="."]
+
+[node name="TowerMesh" type="MeshInstance3D" parent="Tower"]
+position = Vector3(0, -20, 60)
+mesh = SubResource("BoxMesh_tower")
+surface_material_override/0 = ExtResource("4_metal")
+
+[node name="Table" type="Node3D" parent="."]
+
+[node name="TableMesh" type="MeshInstance3D" parent="Table"]
+mesh = SubResource("BoxMesh_table")
+surface_material_override/0 = ExtResource("3_wood")
+
+[node name="Landing" type="Node3D" parent="."]
+rotation_degrees = Vector3(33, 0, 0)
+
+[node name="LandingMesh" type="MeshInstance3D" parent="Landing"]
+mesh = SubResource("BoxMesh_landing")
+surface_material_override/0 = ExtResource("2_snow")
+
+[node name="LandingCollider" type="StaticBody3D" parent="Landing"]
+
+[node name="LandingColliderShape" type="CollisionShape3D" parent="Landing/LandingCollider"]
+shape = SubResource("BoxMesh_landing")
+
+[node name="StartMarker" type="Marker3D" parent="."]
+position = Vector3(0, 60, -95)
+
+[node name="TakeoffMarker" type="Marker3D" parent="."]
+position = Vector3(0, 0, 0)
+
+[node name="KPointMarker" type="Marker3D" parent="."]
+position = Vector3(0, -48, 80)
