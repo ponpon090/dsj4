@@ -12,7 +12,7 @@ var jump_distance: float = 0.0
 var jump_quality: float = 0.0
 var speed: float = 0.0
 var crouch_factor: float = 0.0  # 0=upright, 1=fully crouched
-var body_angle: float = 15.0    # flight body angle degrees
+var body_pitch: float = 15.0    # flight body pitch angle in degrees (positive = nose up)
 
 # Physics vars
 var inrun_start_pos: Vector3 = Vector3.ZERO
@@ -64,17 +64,17 @@ func _process_flying(delta: float):
 	velocity += drag * delta
 	
 	# Apply aerodynamic lift
-	var lift = PhysicsEngine.calculate_lift(velocity, body_angle)
+	var lift = PhysicsEngine.calculate_lift(velocity, body_pitch)
 	velocity += lift * delta
 	
 	# Apply wind
 	velocity = PhysicsEngine.apply_wind(velocity, _wind_velocity, delta)
 	
-	# Handle balance input
+	# Handle balance input (lean_left increases pitch / nose-up, lean_right decreases pitch)
 	if Input.is_action_pressed("lean_left"):
-		body_angle = min(body_angle + delta * 5.0, 30.0)
+		body_pitch = min(body_pitch + delta * 5.0, 30.0)
 	elif Input.is_action_pressed("lean_right"):
-		body_angle = max(body_angle - delta * 5.0, 5.0)
+		body_pitch = max(body_pitch - delta * 5.0, 5.0)
 	
 	# Calculate horizontal distance from takeoff
 	var diff = global_position - takeoff_pos
@@ -116,8 +116,8 @@ func set_wind(wind_vec: Vector3):
 
 func _on_land():
 	state = State.LANDING
-	# Calculate jump quality based on body position
-	jump_quality = clamp(0.5 + (body_angle - 10.0) / 40.0, 0.0, 1.0)
+	# Calculate jump quality based on body pitch at landing
+	jump_quality = clamp(0.5 + (body_pitch - 10.0) / 40.0, 0.0, 1.0)
 	
 	# Distance is horizontal distance from takeoff
 	var diff = global_position - takeoff_pos
@@ -129,7 +129,7 @@ func reset():
 	state = State.IDLE
 	velocity = Vector3.ZERO
 	speed = 0.0
-	body_angle = 15.0
+	body_pitch = 15.0
 	crouch_factor = 0.0
 	jump_distance = 0.0
 	jump_quality = 0.0

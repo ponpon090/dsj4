@@ -22,10 +22,9 @@ func _process(delta: float):
 		_timer = 0.0
 		_generate_new_wind()
 	
-	# Smoothly interpolate to target wind
+	# Smoothly interpolate to target wind (direction stored and interpolated in degrees)
 	current_wind_speed = lerp(current_wind_speed, _target_wind_speed, 0.1)
-	current_wind_direction = lerp_angle(deg_to_rad(current_wind_direction), deg_to_rad(_target_wind_direction), 0.1)
-	current_wind_direction = rad_to_deg(current_wind_direction)
+	current_wind_direction = lerp(current_wind_direction, _target_wind_direction, 0.1)
 	
 	wind_changed.emit(get_wind_data())
 

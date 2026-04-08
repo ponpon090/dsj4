@@ -17,14 +17,18 @@ static func calculate_drag(velocity: Vector3) -> Vector3:
 	var drag_magnitude = 0.5 * AIR_DENSITY * DRAG_COEFFICIENT * FRONTAL_AREA * speed * speed
 	return -velocity.normalized() * drag_magnitude / SKIER_MASS
 
-# Calculate lift force during flight
-static func calculate_lift(velocity: Vector3, body_angle: float) -> Vector3:
+# Calculate lift force during flight based on angle of attack
+# body_pitch: skier's pitch angle in degrees (positive = nose up)
+static func calculate_lift(velocity: Vector3, body_pitch: float) -> Vector3:
 	var speed = velocity.length()
 	if speed < 0.001:
 		return Vector3.ZERO
+	# Angle of attack = difference between body pitch and velocity pitch angle
+	var horiz_speed = Vector2(velocity.x, velocity.z).length()
+	var vel_pitch_deg = rad_to_deg(atan2(-velocity.y, horiz_speed))
+	var angle_of_attack = clamp(body_pitch - vel_pitch_deg, -30.0, 30.0)
 	var lift_magnitude = 0.5 * AIR_DENSITY * LIFT_COEFFICIENT * FRONTAL_AREA * speed * speed
-	var lift_dir = Vector3(0, 1, 0)  # Upward lift
-	return lift_dir * lift_magnitude * sin(deg_to_rad(body_angle)) / SKIER_MASS
+	return Vector3.UP * lift_magnitude * sin(deg_to_rad(angle_of_attack)) / SKIER_MASS
 
 # Simulate slope acceleration
 static func calculate_slope_acceleration(slope_angle_deg: float, friction: float = 0.03) -> float:

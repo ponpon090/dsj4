@@ -25,7 +25,9 @@ func _ready():
 	_build_hill()
 
 func _build_hill():
-	# Update position markers based on hill config
+	# The inrun mesh is rotated in the scene (-33° on X-axis).
+	# Here we set world-space marker positions to match that geometry:
+	# start_marker is at the top of the inrun, takeoff at origin, k_point on the landing slope.
 	start_marker.position = Vector3(0, hill_config.inrun_length * sin(deg_to_rad(hill_config.inrun_angle)), 
 								   -hill_config.inrun_length * cos(deg_to_rad(hill_config.inrun_angle)))
 	takeoff_marker.position = Vector3(0, 0, 0)
