@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '7.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Define your dependencies here
+}
