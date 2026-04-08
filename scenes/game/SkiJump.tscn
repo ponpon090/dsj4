@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scenes/game/SkiJump.gd" id="1_skijump"]
 [ext_resource type="Material" path="res://resources/materials/snow_material.tres" id="2_snow"]
@@ -8,7 +8,13 @@
 [sub_resource type="BoxMesh" id="BoxMesh_inrun"]
 size = Vector3(4, 0.2, 120)
 
+[sub_resource type="BoxShape3D" id="BoxShape_inrun"]
+size = Vector3(4, 0.2, 120)
+
 [sub_resource type="BoxMesh" id="BoxMesh_landing"]
+size = Vector3(20, 0.2, 200)
+
+[sub_resource type="BoxShape3D" id="BoxShape_landing"]
 size = Vector3(20, 0.2, 200)
 
 [sub_resource type="BoxMesh" id="BoxMesh_tower"]
@@ -16,8 +22,6 @@ size = Vector3(4, 40, 4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_table"]
 size = Vector3(4, 0.3, 3)
-
-[sub_resource type="StaticBody3D" id="StaticBody_landing"]
 
 [node name="SkiJump" type="Node3D"]
 script = ExtResource("1_skijump")
@@ -32,7 +36,7 @@ surface_material_override/0 = ExtResource("2_snow")
 [node name="InrunCollider" type="StaticBody3D" parent="Inrun"]
 
 [node name="InrunColliderShape" type="CollisionShape3D" parent="Inrun/InrunCollider"]
-shape = SubResource("BoxMesh_inrun")
+shape = SubResource("BoxShape_inrun")
 
 [node name="Tower" type="Node3D" parent="."]
 
@@ -57,7 +61,7 @@ surface_material_override/0 = ExtResource("2_snow")
 [node name="LandingCollider" type="StaticBody3D" parent="Landing"]
 
 [node name="LandingColliderShape" type="CollisionShape3D" parent="Landing/LandingCollider"]
-shape = SubResource("BoxMesh_landing")
+shape = SubResource("BoxShape_landing")
 
 [node name="StartMarker" type="Marker3D" parent="."]
 position = Vector3(0, 60, -95)

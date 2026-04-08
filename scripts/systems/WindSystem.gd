@@ -14,7 +14,6 @@ var _target_wind_speed: float = 0.0
 var _target_wind_direction: float = 0.0
 
 func _ready():
-	randomize()
 	_generate_new_wind()
 
 func _process(delta: float):

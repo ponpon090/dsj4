@@ -21,7 +21,7 @@ func _ready():
 	settings_btn.pressed.connect(func(): settings_pressed.emit())
 	quit_btn.pressed.connect(func(): get_tree().quit())
 	
-	if bg_anim:
+	if bg_anim and bg_anim.has_animation("bg_float"):
 		bg_anim.play("bg_float")
 
 func _process(delta: float):

@@ -70,12 +70,16 @@ func _on_back_pressed():
 
 func _on_music_changed(value: float):
 	current_settings["music_volume"] = value
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), linear_to_db(value))
+	var bus_idx = AudioServer.get_bus_index("Music")
+	if bus_idx >= 0:
+		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(value))
 	settings_changed.emit(current_settings)
 
 func _on_sfx_changed(value: float):
 	current_settings["sfx_volume"] = value
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("SFX"), linear_to_db(value))
+	var bus_idx = AudioServer.get_bus_index("SFX")
+	if bus_idx >= 0:
+		AudioServer.set_bus_volume_db(bus_idx, linear_to_db(value))
 	settings_changed.emit(current_settings)
 
 func _on_quality_changed(index: int):
